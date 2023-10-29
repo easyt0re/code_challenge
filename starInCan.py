@@ -278,25 +278,55 @@ coord_2 = [0, 0, 1]
 coord_3 = [1, 1, 0]
 coord_4 = [1, 1, 1]
 coord_5 = [0, 1, 0]
-print("input done")
-print(add_list(p2, p3))
-print(scale_list(p2, -3))
-print(dot_prod(p2, p3))
-print(diff_list(p2, p1))
-print(diff_list(p3, p1))
-print(norm_list(p3))
-print(simple_vect(p1).coord_a)
-print(simple_vect(p1, p2).dist_btw)
+# print("input done")
+# print(add_list(p2, p3))
+# print(scale_list(p2, -3))
+# print(dot_prod(p2, p3))
+# print(diff_list(p2, p1))
+# print(diff_list(p3, p1))
+# print(norm_list(p3))
+# print(simple_vect(p1).coord_a)
+# print(simple_vect(p1, p2).dist_btw)
 
 # center, radius = fine_DIY(p1, p2, p3)
 # print(f"Center: {center}, Radius: {radius}")
 
 coord_list = [coord_1, coord_2, coord_3, coord_4, coord_5]
-min_volumn = 1e10
+
+# test_case_1
+coord_1 = [1, 0, 0]
+coord_2 = [1, 1, 0]
+coord_3 = [0, 0, 0]
+coord_4 = [0, 0, 1]
+test_case_1 = [coord_1, coord_2, coord_3, coord_4]
+# result = 1.57079633
+
+# test_case_2
+coord_1 = [-100, 0, 0]
+coord_2 = [10, 0, 10]
+coord_3 = [-10, -10, -10]
+coord_4 = [0, 0, 0]
+test_case_2 = [coord_1, coord_2, coord_3, coord_4]
+# result = 41938.65135885
+
+# test_case_1
+coord_1 = [10, 20, 30]
+coord_2 = [0, 0, 0]
+coord_3 = [-100, 1000, -20]
+coord_4 = [100, -20, 33]
+coord_5 = [8, -7, 900]
+coord_6 = [-100, -223, -23]
+coord_7 = [3, 0, 3]
+test_case_3 = [coord_1, coord_2, coord_3, coord_4, coord_5, coord_6, coord_7]
+# result = 298192571.11934924
+
+test_case_in = test_case_3
+
+min_volumn = 1e100
 from itertools import combinations
 # import bisect
 
-for each_comb in combinations(coord_list, 3):
+for each_comb in combinations(test_case_in, 3):
     # this is for every combination for 3 out of N points
 
     # plane as class
