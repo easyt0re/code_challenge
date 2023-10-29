@@ -265,43 +265,16 @@ def check_circle(a_circle, unit_norm_vector, coord_another):
     dist_vect = diff_list(vect2plane, scale_list(unit_norm_vector, height))
     distance = norm_list(dist_vect)
 
-    if height == 1:
-        print("this is inside check_circle")
-        print(coord_center)
-        print(coord_another)
-        print(unit_norm_vector)
-        print("end of check_circle")
+    # if height == 1:
+    #     print("this is inside check_circle")
+    #     print(coord_center)
+    #     print(coord_another)
+    #     print(unit_norm_vector)
+    #     print("end of check_circle")
 
     return height, distance
 
 
-
-# # Test with three points in 3D space
-# p1 = [1, 0, 0]
-# p2 = [0, 2, 0]
-# p3 = [0, 0, 3]
-
-# coord_1 = [0, 0, 0]
-# coord_2 = [0, 0, 1]
-# coord_3 = [1, 1, 0]
-# coord_4 = [1, 1, 1]
-# coord_5 = [0, 1, 0]
-# # print("input done")
-# # print(add_list(p2, p3))
-# # print(scale_list(p2, -3))
-# # print(dot_prod(p2, p3))
-# # print(diff_list(p2, p1))
-# # print(diff_list(p3, p1))
-# # print(norm_list([3,4,0]))
-# # print(simple_vect(p1).coord_a)
-# # print(simple_vect(p1, p2).dist_btw)
-
-# # center, radius = fine_DIY(p1, p2, p3)
-# # print(f"Center: {center}, Radius: {radius}")
-
-
-
-# coord_list = [coord_1, coord_2, coord_3, coord_4, coord_5]
 
 # test_case_1
 coord_1 = [1, 0, 0]
@@ -357,15 +330,15 @@ for each_comb in combinations(test_case_in, 3):
 
     # plane as class
     planeIn = simple_plane(each_comb)
-    print("3p circle")
-    print(planeIn.circle3p.coord_center)
-    print(planeIn.circle3p.circle_r)
-    if planeIn.hasCircle2p:
-        print("has 2p circle")
-        print(planeIn.circle2p.coord_center)
-        print(planeIn.circle2p.circle_r)
-    else:
-        print("no 2p circle")
+    # print("3p circle")
+    # print(planeIn.circle3p.coord_center)
+    # print(planeIn.circle3p.circle_r)
+    # if planeIn.hasCircle2p:
+    #     print("has 2p circle")
+    #     print(planeIn.circle2p.coord_center)
+    #     print(planeIn.circle2p.circle_r)
+    # else:
+    #     print("no 2p circle")
     # # rely on func
     # coord_center, circle_r, unit_norm_vector = find_circle(each_comb)
 
@@ -381,13 +354,13 @@ for each_comb in combinations(test_case_in, 3):
                 # this is not the first point
                 if height * prev_height < 0:
                     # this is not a bottom circle, break out
-                    print("points on both sides, drop")
+                    # print("points on both sides, drop")
                     flagTwoSides = True
                     break
                 else:
                     if distance > circle_in.circle_r + diff_tol:
                         # this is not in circle, break out
-                        print("points outside, drop")
+                        # print("points outside, drop")
                         flagOutside = True
                         break
                     else:
@@ -406,7 +379,7 @@ for each_comb in combinations(test_case_in, 3):
 
                 if distance > circle_in.circle_r + diff_tol:
                     # this is not in circle, break out
-                    print("points outside, drop")
+                    # print("points outside, drop")
                     flagOutside = True
                     break
                 else:
@@ -423,10 +396,10 @@ for each_comb in combinations(test_case_in, 3):
         pass
     else:
         if max_height != 0:
-            print("3p height")
-            print(max_height)
+            # print("3p height")
+            # print(max_height)
             volumn = math.pi * circle_in.circle_r ** 2 * max_height
-            print(volumn)
+            # print(volumn)
             if volumn < min_volumn:
                 min_volumn = volumn
 
@@ -451,13 +424,13 @@ for each_comb in combinations(test_case_in, 3):
                         # this is not the first point
                         if height * prev_height < 0:
                             # this is not a bottom circle, break out
-                            print("points on both sides, drop")
+                            # print("points on both sides, drop")
                             flagTwoSides = True
                             break
                         else:
                             if distance > circle_in.circle_r + diff_tol:
                                 # this is not in circle, break out
-                                print("points outside, drop")
+                                # print("points outside, drop")
                                 flagOutside = True
                                 break
                             else:
@@ -476,7 +449,7 @@ for each_comb in combinations(test_case_in, 3):
 
                         if distance > circle_in.circle_r + diff_tol:
                             # this is not in circle, break out
-                            print("points outside, drop")
+                            # print("points outside, drop")
                             flagOutside = True
                             break
                         else:
@@ -492,15 +465,15 @@ for each_comb in combinations(test_case_in, 3):
             pass
         else:
             if max_height != 0:
-                print("2p height")
-                print(max_height)
+                # print("2p height")
+                # print(max_height)
                 volumn = math.pi * circle_in.circle_r ** 2 * max_height
-                print(volumn)
+                # print(volumn)
                 if volumn < min_volumn:
                     min_volumn = volumn
 
     # end of check for the whole plane, reset things
-    print(min_volumn)
+    # print(min_volumn)
     prev_height = 0
     max_height = 0
     flagTwoSides = False
