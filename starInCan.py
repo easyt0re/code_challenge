@@ -245,7 +245,7 @@ def proj_3d_to_2d(planeIn, starPtOut):
     # positive, on the norm vector side
     # starPtOnPlane = vector_to_plane - height * planeIn.u_norm_vector
 
-   return ((x_on_plane, y_on_plane), height)
+    return ((x_on_plane, y_on_plane), height)
 
 def height_and_dist(coord_center, circle_r, coord_another, unit_norm_vector):
     vect2plane = diff_list(coord_another, coord_center)
@@ -263,6 +263,8 @@ def check_circle(a_circle, unit_norm_vector, coord_another):
     height = dot_prod(vect2plane, unit_norm_vector)
     dist_vect = diff_list(vect2plane, scale_list(unit_norm_vector, height))
     distance = norm_list(dist_vect)
+
+    return height, distance
 
 
 
@@ -286,8 +288,8 @@ print(norm_list(p3))
 print(simple_vect(p1).coord_a)
 print(simple_vect(p1, p2).dist_btw)
 
-center, radius = fine_DIY(p1, p2, p3)
-print(f"Center: {center}, Radius: {radius}")
+# center, radius = fine_DIY(p1, p2, p3)
+# print(f"Center: {center}, Radius: {radius}")
 
 coord_list = [coord_1, coord_2, coord_3, coord_4, coord_5]
 min_volumn = 1e10
@@ -309,13 +311,13 @@ for each_comb in combinations(coord_list, 3):
         # # rely on func
         # height, distance = height_and_dist(coord_center, circle_r, each_coord, unit_norm_vector)
         if height != 0:
-            if 'prev_height' in local():
+            if 'prev_height' in locals():
                 # this is not the first point
                 if height * prev_height < 0:
                     # this is not a bottom circle, break out
                     break
                 else:
-                    if distance > circle_r:
+                    if distance > planeIn.circle3p.circle_r:
                         # this is not in circle, break out
                         break
                     else:
@@ -339,14 +341,14 @@ for each_comb in combinations(coord_list, 3):
             pass
 
     # end of for loop 3p height search 
-    if 'max_height' in local():
-        volumn = pi * circle_r ** 2 * max_height
+    if 'max_height' in locals():
+        volumn = math.pi * planeIn.circle3p.circle_r ** 2 * max_height
         if volumn < min_volumn:
             min_volumn = volumn
 
         # end of 3p circle check, reset things
         # intentionally put in if structure to make sure they exist
-        del prev_height max_height
+        del prev_height, max_height
 
     # conditionally check 2p circle, same as 3p
     if planeIn.hasCircle2p:
@@ -356,13 +358,13 @@ for each_comb in combinations(coord_list, 3):
             # # rely on func
             # height, distance = height_and_dist(coord_center, circle_r, each_coord, unit_norm_vector)
             if height != 0:
-                if 'prev_height' in local():
+                if 'prev_height' in locals():
                     # this is not the first point
                     if height * prev_height < 0:
                         # this is not a bottom circle, break out
                         break
                     else:
-                        if distance > circle_r:
+                        if distance > planeIn.circle2p.circle_r:
                             # this is not in circle, break out
                             break
                         else:
@@ -387,12 +389,13 @@ for each_comb in combinations(coord_list, 3):
                 pass
 
         # end of for loop 2p height search 
-        if 'max_height' in local():
-            volumn = pi * circle_r ** 2 * max_height
+        if 'max_height' in locals():
+            volumn = math.pi * planeIn.circle2p.circle_r ** 2 * max_height
             if volumn < min_volumn:
                 min_volumn = volumn
 
             # end of 2p circle check, reset things
             # intentionally put in if structure to make sure they exist
-            del prev_height max_height
+            del prev_height, max_height
 
+print(min_volumn)
