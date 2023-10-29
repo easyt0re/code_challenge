@@ -265,36 +265,43 @@ def check_circle(a_circle, unit_norm_vector, coord_another):
     dist_vect = diff_list(vect2plane, scale_list(unit_norm_vector, height))
     distance = norm_list(dist_vect)
 
+    if height == 1:
+        print("this is inside check_circle")
+        print(coord_center)
+        print(coord_another)
+        print(unit_norm_vector)
+        print("end of check_circle")
+
     return height, distance
 
 
 
-# Test with three points in 3D space
-p1 = [1, 0, 0]
-p2 = [0, 2, 0]
-p3 = [0, 0, 3]
+# # Test with three points in 3D space
+# p1 = [1, 0, 0]
+# p2 = [0, 2, 0]
+# p3 = [0, 0, 3]
 
-coord_1 = [0, 0, 0]
-coord_2 = [0, 0, 1]
-coord_3 = [1, 1, 0]
-coord_4 = [1, 1, 1]
-coord_5 = [0, 1, 0]
-# print("input done")
-# print(add_list(p2, p3))
-# print(scale_list(p2, -3))
-# print(dot_prod(p2, p3))
-# print(diff_list(p2, p1))
-# print(diff_list(p3, p1))
-print(norm_list([3,4,0]))
-# print(simple_vect(p1).coord_a)
-# print(simple_vect(p1, p2).dist_btw)
+# coord_1 = [0, 0, 0]
+# coord_2 = [0, 0, 1]
+# coord_3 = [1, 1, 0]
+# coord_4 = [1, 1, 1]
+# coord_5 = [0, 1, 0]
+# # print("input done")
+# # print(add_list(p2, p3))
+# # print(scale_list(p2, -3))
+# # print(dot_prod(p2, p3))
+# # print(diff_list(p2, p1))
+# # print(diff_list(p3, p1))
+# # print(norm_list([3,4,0]))
+# # print(simple_vect(p1).coord_a)
+# # print(simple_vect(p1, p2).dist_btw)
 
-# center, radius = fine_DIY(p1, p2, p3)
-# print(f"Center: {center}, Radius: {radius}")
+# # center, radius = fine_DIY(p1, p2, p3)
+# # print(f"Center: {center}, Radius: {radius}")
 
 
 
-coord_list = [coord_1, coord_2, coord_3, coord_4, coord_5]
+# coord_list = [coord_1, coord_2, coord_3, coord_4, coord_5]
 
 # test_case_1
 coord_1 = [1, 0, 0]
@@ -331,7 +338,7 @@ coord_4 = [1, 1, 2]
 test_case_4 = [coord_1, coord_2, coord_3, coord_4]
 # result = ?
 
-test_case_in = test_case_2
+test_case_in = test_case_3
 
 min_volumn = 1e100
 min_height = 2000 / (1 + 2000 ** 2) ** 0.5 / 2000
@@ -339,6 +346,8 @@ diff_tol = 1e-6
 
 flagTwoSides = False
 flagOutside = False
+max_height = 0
+prev_height = 0
 
 from itertools import combinations
 # import bisect
@@ -362,13 +371,13 @@ for each_comb in combinations(test_case_in, 3):
 
     # always check 3p circle
     circle_in = planeIn.circle3p
-    for each_coord in coord_list:
+    for each_coord in test_case_in:
         # plane as class
         height, distance = check_circle(circle_in, planeIn.u_z_axis, each_coord)
         # # rely on func
         # height, distance = height_and_dist(coord_center, circle_r, each_coord, unit_norm_vector)
-        if abs(height) >= min_height:
-            if 'prev_height' in globals():
+        if abs(height) >= min_height + diff_tol:
+            if prev_height != 0:
                 # this is not the first point
                 if height * prev_height < 0:
                     # this is not a bottom circle, break out
@@ -376,7 +385,7 @@ for each_comb in combinations(test_case_in, 3):
                     flagTwoSides = True
                     break
                 else:
-                    if distance > circle_in.circle_r:
+                    if distance > circle_in.circle_r + diff_tol:
                         # this is not in circle, break out
                         print("points outside, drop")
                         flagOutside = True
@@ -388,12 +397,14 @@ for each_comb in combinations(test_case_in, 3):
 
                         # actually, only the largest is enough
                         new_height = abs(height)
-                        if new_height > max_height:
+                        if new_height > max_height  + diff_tol:
                             max_height = new_height
                         
             else:
-                # this is the first point
-                if distance > circle_in.circle_r:
+                # this is the first point, prev_height = 0
+                prev_height = height
+
+                if distance > circle_in.circle_r + diff_tol:
                     # this is not in circle, break out
                     print("points outside, drop")
                     flagOutside = True
@@ -401,7 +412,7 @@ for each_comb in combinations(test_case_in, 3):
                 else:
                     max_height = abs(height)
 
-            prev_height = height
+            
 
         else:
             # this is either the 3 points, or 4 points co-planar
@@ -411,17 +422,17 @@ for each_comb in combinations(test_case_in, 3):
     if flagTwoSides or flagOutside:
         pass
     else:
-        if 'max_height' in globals():
+        if max_height != 0:
             print("3p height")
             print(max_height)
             volumn = math.pi * circle_in.circle_r ** 2 * max_height
+            print(volumn)
             if volumn < min_volumn:
                 min_volumn = volumn
-                print(min_volumn)
 
     # end of 3p circle check, reset things for 3p
-    globals().pop('prev_height', None);
-    globals().pop('max_height', None);
+    prev_height = 0
+    max_height = 0
     flagOutside = False
 
     # conditionally check 2p circle, same as 3p
@@ -430,13 +441,13 @@ for each_comb in combinations(test_case_in, 3):
     else:
         if planeIn.hasCircle2p:
             circle_in = planeIn.circle2p
-            for each_coord in coord_list:
+            for each_coord in test_case_in:
                 # plane as class
                 height, distance = check_circle(circle_in, planeIn.u_z_axis, each_coord)
                 # # rely on func
                 # height, distance = height_and_dist(coord_center, circle_r, each_coord, unit_norm_vector)
-                if abs(height) >= min_height:
-                    if 'prev_height' in globals():
+                if abs(height) >= min_height + diff_tol:
+                    if prev_height != 0:
                         # this is not the first point
                         if height * prev_height < 0:
                             # this is not a bottom circle, break out
@@ -444,7 +455,7 @@ for each_comb in combinations(test_case_in, 3):
                             flagTwoSides = True
                             break
                         else:
-                            if distance > circle_in.circle_r:
+                            if distance > circle_in.circle_r + diff_tol:
                                 # this is not in circle, break out
                                 print("points outside, drop")
                                 flagOutside = True
@@ -456,12 +467,14 @@ for each_comb in combinations(test_case_in, 3):
 
                                 # actually, only the largest is enough
                                 new_height = abs(height)
-                                if new_height > max_height:
+                                if new_height > max_height + diff_tol:
                                     max_height = new_height
                                 
                     else:
                         # this is the first point
-                        if distance > circle_in.circle_r:
+                        prev_height = height
+
+                        if distance > circle_in.circle_r + diff_tol:
                             # this is not in circle, break out
                             print("points outside, drop")
                             flagOutside = True
@@ -469,7 +482,6 @@ for each_comb in combinations(test_case_in, 3):
                         else:
                             max_height = abs(height)
 
-                    prev_height = height
 
                 else:
                     # this is either the 3 points, or 4 points co-planar
@@ -479,18 +491,18 @@ for each_comb in combinations(test_case_in, 3):
         if flagTwoSides or flagOutside:
             pass
         else:
-            if 'max_height' in globals():
+            if max_height != 0:
                 print("2p height")
                 print(max_height)
                 volumn = math.pi * circle_in.circle_r ** 2 * max_height
+                print(volumn)
                 if volumn < min_volumn:
                     min_volumn = volumn
-                    print(min_volumn)
 
     # end of check for the whole plane, reset things
     print(min_volumn)
-    globals().pop('prev_height', None);
-    globals().pop('max_height', None);
+    prev_height = 0
+    max_height = 0
     flagTwoSides = False
     flagOutside = False
 
