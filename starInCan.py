@@ -38,11 +38,11 @@ def diff_list(coord_a, coord_b):
 
     return result
 
-def unit_norm_vector(coord_a, coord_b):
-	norm_vector = cross_prod(coord_a, coord_b)
-	result = norm_vector / (dot_prod(norm_vector, norm_vector)) ** 0.5
+# def unit_norm_vector(coord_a, coord_b):
+# 	norm_vector = cross_prod(coord_a, coord_b)
+# 	result = norm_vector / (dot_prod(norm_vector, norm_vector)) ** 0.5
 
-	return result
+# 	return result
 
 def norm_list(coord_a):
     return (dot_prod(coord_a, coord_a)) ** 0.5
@@ -284,12 +284,14 @@ coord_5 = [0, 1, 0]
 # print(dot_prod(p2, p3))
 # print(diff_list(p2, p1))
 # print(diff_list(p3, p1))
-# print(norm_list(p3))
+print(norm_list([3,4,0]))
 # print(simple_vect(p1).coord_a)
 # print(simple_vect(p1, p2).dist_btw)
 
 # center, radius = fine_DIY(p1, p2, p3)
 # print(f"Center: {center}, Radius: {radius}")
+
+
 
 coord_list = [coord_1, coord_2, coord_3, coord_4, coord_5]
 
@@ -362,12 +364,16 @@ for each_comb in combinations(test_case_in, 3):
                         
             else:
                 # this is the first point
-                max_height = abs(height)
+                if distance > planeIn.circle3p.circle_r:
+                    # this is not in circle, break out
+                    break
+                else:
+                    max_height = abs(height)
 
             prev_height = height
 
         else:
-            # this is either the 3 points or 4 points co-planar
+            # this is either the 3 points, or 4 points co-planar
             pass
 
     # end of for loop 3p height search 
@@ -409,7 +415,11 @@ for each_comb in combinations(test_case_in, 3):
                             
                 else:
                     # this is the first point
-                    max_height = abs(height)
+                    if distance > planeIn.circle2p.circle_r:
+                        # this is not in circle, break out
+                        break
+                    else:
+                        max_height = abs(height)
 
                 # update "memory"
                 prev_height = height
